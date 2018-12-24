@@ -1,17 +1,84 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Purple Peace</ion-title>
   </ion-navbar>
+
+
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <div text-center>
+    <button ion-button (click)="scanAndAnalyzeLabel()">
+      <ion-icon large name="camera"></ion-icon>
+      &nbsp;
+      Scan label
+    </button>
+
+    <button ion-button (click)="useTestImageToAnalyze()">
+      <ion-icon large name="restaurant"></ion-icon>
+      &nbsp;
+      Use Test label
+    </button>
+
+    <img [src]="base64Image" *ngIf="base64Image!=null" />
+  </div>
+
+  <div *ngIf="ocr!=null">
+    <h4>
+      Optical Read Results
+    </h4>
+    <p>language: {{ocr.language}}</p>
+    <p>orientation: {{ocr.orientation}}</p>
+    <p>angle: {{ocr.textAngle}}</p>
+
+    <div *ngFor="let r of ocr.regions">
+      <ion-row *ngFor="let l of r.lines">
+        <ion-col col-8>
+          <li>{{concatWords(l)}}
+        </ion-col>
+        <ion-col>
+          {{trimText(l.boundingBox)}}
+        </ion-col>
+      </ion-row>
+    </div>
+
+  </div>
+
+  <hr/>
+
+  <div *ngIf="analysis!=null">
+    <h4>
+      Vision Results
+    </h4>
+
+    <h5 *ngIf="analysis.description.captions.length>0">{{analysis.description.captions[0].text}}</h5>
+
+    <ion-row *ngFor="let r of analysis.categories">
+      <ion-col>
+        {{r.name}}:
+      </ion-col>
+      <ion-col col-8>
+        {{formatPercentage(r.score)}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let t of analysis.tags">
+      <ion-col>
+        {{t.name}}:
+      </ion-col>
+      <ion-col col-8>
+        {{formatPercentage(t.confidence)}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        tags:
+      </ion-col>
+      <ion-col col-8>
+        {{formatTags(analysis.description.tags)}}
+      </ion-col>
+    </ion-row>
+  </div>
+
 </ion-content>
