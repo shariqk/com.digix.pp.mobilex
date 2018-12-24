@@ -7,6 +7,10 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-fab bottom right *ngIf="working">
+    <ion-spinner name="crescent"></ion-spinner>
+  </ion-fab>
+
   <div text-center>
     <button ion-button (click)="scanAndAnalyzeLabel()">
       <ion-icon large name="camera"></ion-icon>
@@ -24,6 +28,8 @@
   </div>
 
   <div *ngIf="ocr!=null">
+    <hr/>
+
     <h4>
       Optical Read Results
     </h4>
@@ -44,9 +50,9 @@
 
   </div>
 
-  <hr/>
 
   <div *ngIf="analysis!=null">
+    <hr/>
     <h4>
       Vision Results
     </h4>

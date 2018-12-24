@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MsvisionApiProvider } from '../../providers/msvision-api/msvision-api';
 import { MSVisionApiResult, MSVisionOcrResult, Line } from '../../providers/msvision-api/msvision-api.model';
@@ -13,9 +13,9 @@ export class HomePage {
   analysis : MSVisionApiResult = null;
   ocr: MSVisionOcrResult = null;
   testImageUrl = 'https://media.istockphoto.com/photos/nexium-24hr-14-capsules-bottle-picture-id504539501?k=6&m=504539501&s=612x612&w=0&h=QcNT8-vEsUb01NkqZUHoaAdjySBLt_VVBIP8RJscycM=';
+  working: boolean = false;
 
   constructor(public navCtrl: NavController,
-    public toastCtrl: ToastController,
     public msvisionApi : MsvisionApiProvider,
 
     public camera : Camera) {
@@ -64,14 +64,8 @@ export class HomePage {
     this.ocr = null;
     this.analysis = null;
 
-    let toast = this.toastCtrl.create({
-        message: 'Analyzing image...',
-        position: 'top'
-      });
-    toast.present();
-
-
     try {
+      this.working = true;
       this.analysis = await this.msvisionApi.analyzeImageDataAsync(imageData);
       this.ocr = await this.msvisionApi.ocrImageDataAsync(imageData);
       //console.log(this.ocr);
@@ -80,19 +74,17 @@ export class HomePage {
       alert('Error occured while analyzing data: ' + JSON.stringify(err));
     }
     finally {
-      toast.dismiss();
+      this.working = false;
     }
   }
 
 
   async useTestImageToAnalyze() {
-    let toast = this.toastCtrl.create({
-        message: 'Analyzing image...',
-        position: 'top'
-      });
-    toast.present();
+
 
     try {
+      this.working = true;
+
         //'https://c8.alamy.com/comp/ADN09E/label-on-prescription-medicine-bottle-for-nexium-ADN09E.jpg';// 'https://www.medixcbd.com/wp-content/uploads/2018/03/label-1.png';
       this.base64Image = this.testImageUrl;
 
@@ -104,7 +96,7 @@ export class HomePage {
       alert('Error occured while analyzing data: ' + JSON.stringify(err));
     }
     finally {
-      toast.dismiss();
+      this.working = false;
     }
 
 
