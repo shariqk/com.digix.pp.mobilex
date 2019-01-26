@@ -15,6 +15,18 @@ export class HomePage {
   testImageUrl = 'https://media.istockphoto.com/photos/nexium-24hr-14-capsules-bottle-picture-id504539501?k=6&m=504539501&s=612x612&w=0&h=QcNT8-vEsUb01NkqZUHoaAdjySBLt_VVBIP8RJscycM=';
   working: boolean = false;
 
+  keywords: string[] = [
+    'full spectrum',
+    'CBD',
+    'cannabidiol',
+    'phytocannabinoids',
+    'hemp',
+    'extract',
+    'leaves',
+    'flowers',
+    'natural terpenes'
+  ];
+
   constructor(public navCtrl: NavController,
     public msvisionApi : MsvisionApiProvider,
 
@@ -137,7 +149,6 @@ export class HomePage {
   takePicture() : Promise<string> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
-
       try {
         if(ctx.camera == null) {
             alert('Camera is not available');
